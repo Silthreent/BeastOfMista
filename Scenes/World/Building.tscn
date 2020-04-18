@@ -7,6 +7,7 @@
 script = ExtResource( 1 )
 
 [node name="Collider" type="Polygon2D" parent="."]
+visible = false
 color = Color( 0.52549, 0.192157, 0.192157, 1 )
 polygon = PoolVector2Array( -65.9513, -33.6936, 65.9764, -34.7131, 65.1608, 34.4113, -65.7474, 33.7995 )
 

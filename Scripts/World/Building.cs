@@ -13,11 +13,6 @@ public class Building : Node2D
 
 	public override void _UnhandledKeyInput(InputEventKey input)
 	{
-		if(input.IsActionPressed("spawn_building"))
-		{
-			WorldManager.World.RegisterBuilding(this);
-		}
-
 		if (input.IsActionPressed("DEBUGtoggle_buildings"))
 		{
 			Visible = !Visible;

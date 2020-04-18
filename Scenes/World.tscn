@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Scenes/Characters/Character.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/World/Building.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scripts/World/WorldManager.cs" type="Script" id=3]
 [ext_resource path="res://Scripts/Camera.cs" type="Script" id=4]
 
@@ -17,9 +16,6 @@ script = ExtResource( 3 )
 
 [node name="NavPoly" type="NavigationPolygonInstance" parent="NavMesh"]
 navpoly = SubResource( 1 )
-
-[node name="Building" parent="." instance=ExtResource( 2 )]
-position = Vector2( -27.4391, 107.375 )
 
 [node name="Character" parent="." instance=ExtResource( 1 )]
 position = Vector2( -14.5139, -95.2633 )
