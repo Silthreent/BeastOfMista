@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scenes/Characters/Character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Scenes/World/Building.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Scripts/World/WorldManager.cs" type="Script" id=3]
+[ext_resource path="res://Scripts/Camera.cs" type="Script" id=4]
 
 [sub_resource type="NavigationPolygon" id=1]
 vertices = PoolVector2Array( -1405.45, -726.759, 1582.6, -750.103, 1559.25, 1257.49, -1187.57, 1062.96 )
@@ -18,9 +19,11 @@ script = ExtResource( 3 )
 navpoly = SubResource( 1 )
 
 [node name="Building" parent="." instance=ExtResource( 2 )]
-position = Vector2( 391.101, 217.391 )
+position = Vector2( -27.4391, 107.375 )
 
 [node name="Character" parent="." instance=ExtResource( 1 )]
-position = Vector2( 308.36, 50.6279 )
+position = Vector2( -14.5139, -95.2633 )
 
 [node name="Camera" type="Camera2D" parent="."]
+current = true
+script = ExtResource( 4 )

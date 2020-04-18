@@ -44,4 +44,12 @@ public class WorldManager : Node2D
 	{
 		return Buildings[0];
 	}
+
+	public override void _UnhandledKeyInput(InputEventKey input)
+	{
+		if(input.IsActionPressed("quit_game"))
+		{
+			GetTree().Quit();
+		}
+	}
 }
