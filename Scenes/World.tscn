@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Scenes/Characters/Character.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/World/Building.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scripts/World/WorldManager.cs" type="Script" id=3]
+
+[sub_resource type="NavigationPolygon" id=1]
+vertices = PoolVector2Array( -1405.45, -726.759, 1582.6, -750.103, 1559.25, 1257.49, -1187.57, 1062.96 )
+polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
+outlines = [ PoolVector2Array( -1187.57, 1062.96, 1559.25, 1257.49, 1582.6, -750.103, -1405.45, -726.759 ) ]
+
+[node name="World" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="NavMesh" type="Navigation2D" parent="."]
+
+[node name="NavPoly" type="NavigationPolygonInstance" parent="NavMesh"]
+navpoly = SubResource( 1 )
+
+[node name="Building" parent="." instance=ExtResource( 2 )]
+position = Vector2( 391.101, 217.391 )
+
+[node name="Character" parent="." instance=ExtResource( 1 )]
+position = Vector2( 308.36, 50.6279 )
+
+[node name="Camera" type="Camera2D" parent="."]
