@@ -11,4 +11,9 @@ public class IdleState : IState
     public void Start(Character target)
     {
     }
+
+    public string GetDebugInfo()
+    {
+        return "Idling...";
+    }
 }

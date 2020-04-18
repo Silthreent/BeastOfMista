@@ -17,9 +17,13 @@ script = ExtResource( 3 )
 [node name="NavPoly" type="NavigationPolygonInstance" parent="NavMesh"]
 navpoly = SubResource( 1 )
 
-[node name="Character" parent="." instance=ExtResource( 1 )]
-position = Vector2( -14.5139, -95.2633 )
-
 [node name="Camera" type="Camera2D" parent="."]
 current = true
 script = ExtResource( 4 )
+
+[node name="Buildings" type="Node2D" parent="."]
+
+[node name="Characters" type="Node2D" parent="."]
+
+[node name="Character" parent="Characters" instance=ExtResource( 1 )]
+position = Vector2( -14.5139, -95.2633 )

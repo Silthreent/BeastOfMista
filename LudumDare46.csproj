@@ -55,11 +55,13 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Camera.cs" />
+    <Compile Include="Scripts\Entities\AI\BaseAI.cs" />
+    <Compile Include="Scripts\Entities\AI\BuilderAI.cs" />
     <Compile Include="Scripts\Entities\Character.cs" />
+    <Compile Include="Scripts\Entities\States\BuildState.cs" />
     <Compile Include="Scripts\Entities\States\IdleState.cs" />
     <Compile Include="Scripts\Entities\States\IState.cs" />
     <Compile Include="Scripts\Entities\States\MovingState.cs" />
-    <Compile Include="Scripts\Entities\States\StateManager.cs" />
     <Compile Include="Scripts\World\Building.cs" />
     <Compile Include="Scripts\World\WorldManager.cs" />
   </ItemGroup>

@@ -32,5 +32,10 @@ public class MovingState : IState
     public void End(Character target)
     {
     }
+
+    public string GetDebugInfo()
+    {
+        return CurrentPath[PathMarker].ToString();
+    }
 }
 

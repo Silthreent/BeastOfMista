@@ -11,3 +11,18 @@ texture = ExtResource( 2 )
 
 [node name="NavLine" type="Line2D" parent="."]
 default_color = Color( 0.0901961, 0.8, 0.2, 1 )
+
+[node name="DebugLabel" type="Label" parent="."]
+margin_left = -21.238
+margin_top = -46.9947
+margin_right = 18.762
+margin_bottom = -15.9947
+grow_horizontal = 2
+grow_vertical = 2
+text = "Test
+Test"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

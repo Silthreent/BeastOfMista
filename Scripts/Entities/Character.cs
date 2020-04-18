@@ -4,12 +4,14 @@ public class Character : Node2D
 {
 	public float MovementSpeed { get; protected set; } = 150f;
 
-	StateManager State;
+	BaseAI AI;
 	Line2D NavLine;
+	Label DebugStateLabel;
 
 	public override void _Ready()
 	{
-		State = new StateManager(this);
+		AI = new BuilderAI(this);
+		DebugStateLabel = FindNode("DebugLabel") as Label;
 
 		NavLine = FindNode("NavLine") as Line2D;
 		NavLine.SetAsToplevel(true);
@@ -17,32 +19,17 @@ public class Character : Node2D
 
 	public override void _Process(float delta)
 	{
-		State.Process(delta);
+		AI.Process(delta);
+		DebugStateLabel.Text = AI.CurrentState.GetType().ToString() + "\n" + AI.CurrentState.GetDebugInfo();
+	}
+
+	public void FinishState()
+	{
+		AI.FinishState();
 	}
 
 	public void ForceState(IState state)
 	{
-		State.SetState(state);
-	}
-
-	public override void _UnhandledInput(InputEvent input)
-	{
-		var mouse = input as InputEventMouseButton;
-		if (mouse != null)
-		{
-			if(mouse.ButtonIndex == (int)ButtonList.Left && mouse.Pressed)
-			{
-				var newBuilding = ResourceLoader.Load<PackedScene>(@"Scenes\World\Building.tscn");
-				var building = newBuilding.Instance() as Building;
-				building.Position = new Vector2(220, 113);
-
-				WorldManager.World.AddChild(building);
-				WorldManager.World.RegisterBuilding(building);
-
-				NavLine.Points = WorldManager.World.NavMesh.GetSimplePath(GlobalPosition, WorldManager.World.GetBuilding().Entrance.GlobalPosition);
-
-				State.SetState(new MovingState(WorldManager.World.GetBuilding().Entrance.GlobalPosition));
-			}
-		}
+		AI.SetState(state);
 	}
 }
