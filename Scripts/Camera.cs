@@ -4,11 +4,6 @@ public class Camera : Camera2D
 {
     float Speed = 250f;
 
-    public override void _Ready()
-    {
-        Input.SetMouseMode(Input.MouseMode.Confined);
-    }
-
     public override void _Process(float delta)
     {
         var mousePos = GetViewport().GetMousePosition();

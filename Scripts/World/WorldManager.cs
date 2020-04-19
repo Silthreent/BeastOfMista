@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class WorldManager : Node2D
 {
+	public const int REQUIRED_BUILDING_MATERIALS = 300;
+
 	[Export]
 	public PackedScene CharacterScene;
 
@@ -11,11 +13,13 @@ public class WorldManager : Node2D
 	public Navigation2D NavMesh { get; protected set; }
 	public Random GlobalRNG { get; protected set; }
 
+	Building TownHall;
 	Node2D BuildingNode;
 	Node2D CharacterNode;
 	List<Building> Buildings;
 	List<Character> Villagers;
 
+	CursorMode Cursor;
 
 	public WorldManager()
 	{
@@ -42,25 +46,52 @@ public class WorldManager : Node2D
 		farmer.SetJob(new FarmerAI(farmer));
 	}
 
-	public Building CreateBuilding()
+	public Building GetNextBuildProject()
+	{
+		var inprogress = GetBuilding(x => !x.IsFunctional && x.AssignedBuilder == null);
+		if (inprogress != null)
+		{
+			GetTownHall().Storage.LoseItem(Item.Wheat, REQUIRED_BUILDING_MATERIALS / inprogress.BuildType.MaxBuildProgress);
+			return inprogress;
+		}
+
+		if (GetTownHall() == null)
+		{
+			var build = CreateBuilding();
+			build.SetBuildingType(new TownHall());
+			build.Storage.GainItem(Item.Wheat, 2500);
+			TownHall = build;
+
+			return build;
+		}
+		else if(GetTownHall().Storage[Item.Wheat] >= REQUIRED_BUILDING_MATERIALS)
+		{
+			GetTownHall().Storage.LoseItem(Item.Wheat, REQUIRED_BUILDING_MATERIALS);
+
+			if (GetBuildingType(x => x.BuildType is Farmland).Length < Villagers.Count / 2f)
+			{
+				var build = CreateBuilding();
+				build.SetBuildingType(new Farmland());
+
+				return build;
+			}
+			else
+			{
+				var build = CreateBuilding();
+				build.SetBuildingType(new House());
+
+				return build;
+			}
+		}
+
+		return null;
+	}
+
+	Building CreateBuilding()
 	{
 		var building = ResourceLoader.Load<PackedScene>(@"Scenes\World\Building.tscn").Instance() as Building;
 		Buildings.Add(building);
 		BuildingNode.AddChild(building);
-
-		if (GetBuilding(x => x.BuildType is TownHall) == null)
-		{
-			building.SetBuildingType(new TownHall());
-			building.Storage.GainItem(Item.Wheat, 2500);
-		}
-		else if (GetBuildingType(x => x.BuildType is Farmland).Length < Villagers.Count / 2f)
-		{
-			building.SetBuildingType(new Farmland());
-		}
-		else
-		{
-			building.SetBuildingType(new House());
-		}
 
 		return building;
 	}
@@ -88,6 +119,11 @@ public class WorldManager : Node2D
 		return Buildings.Find(check);
 	}
 
+	public Building GetTownHall()
+	{
+		return TownHall;
+	}
+
 	public Building[] GetBuildingType(Predicate<Building> check)
 	{
 		return Buildings.FindAll(check).ToArray();
@@ -113,11 +149,40 @@ public class WorldManager : Node2D
 		return Villagers.Count;
 	}
 
-	public override void _UnhandledKeyInput(InputEventKey input)
+	public void BuildingClicked(Building building)
 	{
-		if(input.IsActionPressed("quit_game"))
+		if(Cursor == CursorMode.Destroy)
 		{
-			GetTree().Quit();
+			if(!(building.BuildType is TownHall))
+				building.TakeDamage(20);
 		}
 	}
+
+	public override void _UnhandledKeyInput(InputEventKey input)
+	{
+		if(input.IsActionPressed("unlock_cursor"))
+		{
+			if(Input.GetMouseMode() == Input.MouseMode.Confined)
+			{
+				Input.SetMouseMode(Input.MouseMode.Visible);
+			}
+			else
+			{
+				Input.SetMouseMode(Input.MouseMode.Confined);
+			}
+		}
+		else if(input.IsActionPressed("cursor_destroy"))
+		{
+			if (Cursor != CursorMode.Destroy)
+				Cursor = CursorMode.Destroy;
+			else
+				Cursor = CursorMode.Nothing;
+		}
+	}
+}
+
+enum CursorMode
+{
+	Nothing,
+	Destroy
 }

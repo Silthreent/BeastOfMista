@@ -8,7 +8,20 @@ public class Building : Node2D
 	public BuildingType BuildType { get; protected set; }
 	public float BuildProgress { get; protected set; }
 	public bool IsCompleted { get; protected set; } = false;
+	public bool IsFunctional {
+		get
+		{
+			if(BuildProgress < BuildType.MaxBuildProgress)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		} }
 	public InventoryManager Storage { get; protected set; }
+	public Character AssignedBuilder { get; set; }
 
 	Sprite Sprite;
 	List<Character> InsideBuilding;
@@ -23,6 +36,7 @@ public class Building : Node2D
 		InteractArea = FindNode("InteractArea") as Area2D;
 		InteractArea.Connect("area_entered", this, "OnAreaEntered");
 		InteractArea.Connect("area_exited", this, "OnAreaExited");
+		InteractArea.Connect("input_event", this, "OnInputRecieved");
 
 		Sprite = FindNode("Sprite") as Sprite;
 	}
@@ -38,14 +52,6 @@ public class Building : Node2D
 		}
 	}
 
-	public override void _UnhandledKeyInput(InputEventKey input)
-	{
-		if (input.IsActionPressed("DEBUGtoggle_buildings"))
-		{
-			Visible = !Visible;
-		}
-	}
-
 	public void ProgressProgress(float amount)
 	{
 		BuildProgress += amount;
@@ -56,12 +62,23 @@ public class Building : Node2D
 		}
 	}
 
+	public void TakeDamage(float amount)
+	{
+		BuildProgress -= amount;
+		if(BuildProgress < 0)
+		{
+			BuildProgress = 0;
+		}
+	}
+
 	public void CompleteBuilding()
 	{
+		if(!IsCompleted)
+			BuildType.FinishedBuilding(this);
+
 		Sprite.Visible = true;
 		IsCompleted = true;
-
-		BuildType.FinishedBuilding(this);
+		AssignedBuilder = null;
 	}
 
 	void EnterBuilding(Character character)
@@ -75,7 +92,7 @@ public class Building : Node2D
 	{
 		InsideBuilding.Remove(character);
 
-		if(character.CurrentLocation == this)
+		if (character.CurrentLocation == this)
 			character.CurrentLocation = null;
 	}
 
@@ -99,6 +116,14 @@ public class Building : Node2D
 		if (area is Character)
 		{
 			ExitBuilding(area as Character);
+		}
+	}
+
+	void OnInputRecieved(Viewport viewport, InputEvent input, int shapexid)
+	{
+		if(input.IsActionPressed("interact"))
+		{
+			WorldManager.World.BuildingClicked(this);
 		}
 	}
 }

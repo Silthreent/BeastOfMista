@@ -67,6 +67,7 @@
     <Compile Include="Scripts\Entities\States\IState.cs" />
     <Compile Include="Scripts\Entities\States\MovingState.cs" />
     <Compile Include="Scripts\Entities\States\RelaxState.cs" />
+    <Compile Include="Scripts\Entities\States\RepairState.cs" />
     <Compile Include="Scripts\Entities\StatManager.cs" />
     <Compile Include="Scripts\World\Buildings\Building.cs" />
     <Compile Include="Scripts\World\Buildings\BuildingType.cs" />

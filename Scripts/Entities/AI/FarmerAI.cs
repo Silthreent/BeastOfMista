@@ -19,8 +19,11 @@ public class FarmerAI : BaseAI
             }
             else
             {
-                SetState(new MovingState(AssignedLand.GlobalPosition));
-                NextState = new FarmingState(AssignedLand);
+                if(AssignedLand.IsFunctional)
+                {
+                    SetState(new MovingState(AssignedLand.GlobalPosition));
+                    NextState = new FarmingState(AssignedLand);
+                }
             }
         }
     }

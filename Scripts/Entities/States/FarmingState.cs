@@ -27,8 +27,15 @@ public class FarmingState : IState
         }
         else
         {
-            WorkingFarmland.Storage.GainItem(Item.Wheat, 10 * delta);
-            target.Stats.ReduceStat(Stat.Energy, 10 * delta);
+            if(WorkingFarmland.IsFunctional)
+            {
+                WorkingFarmland.Storage.GainItem(Item.Wheat, 10 * delta);
+                target.Stats.ReduceStat(Stat.Energy, 10 * delta);
+            }
+            else
+            {
+                target.AI.SetState(new MovingState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall)));
+            }
         }
     }
 
