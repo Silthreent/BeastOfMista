@@ -46,12 +46,12 @@ public class BaseAI
 
     public void FinishState()
     {
-        if(NextState != null)
+        if (NextState != null)
         {
             SetState(NextState);
             NextState = null;
         }
-        else if(PreviousState != null)
+        else if (PreviousState != null)
         {
             SetState(PreviousState);
             PreviousState = null;

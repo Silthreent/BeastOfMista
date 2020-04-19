@@ -8,6 +8,7 @@ public class Building : Node2D
 	public BuildingType BuildType { get; protected set; }
 	public float BuildProgress { get; protected set; }
 	public bool IsCompleted { get; protected set; } = false;
+	public InventoryManager Storage { get; protected set; }
 
 	Sprite Sprite;
 	List<Character> InsideBuilding;
@@ -15,6 +16,7 @@ public class Building : Node2D
 	public override void _Ready()
 	{
 		InsideBuilding = new List<Character>();
+		Storage = new InventoryManager();
 
 		PathCollider = FindNode("PathCollider") as Polygon2D;
 

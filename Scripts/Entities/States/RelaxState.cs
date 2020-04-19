@@ -1,5 +1,11 @@
 public class RelaxState : IState
 {
+    Building RelaxBuilding;
+
+    public RelaxState(Building building)
+    {
+        RelaxBuilding = building;
+    }
 
     public void Start(Character target)
     {
@@ -7,9 +13,14 @@ public class RelaxState : IState
 
     public void Process(Character target, float delta)
     {
-        if(target.Stats.GetStat(Stat.Energy) >= 100)
+        if(target.Stats[Stat.Energy] >= 100)
         {
             target.AI.FinishState();
+        }
+
+        if (target.GlobalPosition.DistanceTo(RelaxBuilding.GlobalPosition) > 10)
+        {
+            target.AI.InterruptState(new MovingState(RelaxBuilding.GlobalPosition));
         }
     }
 

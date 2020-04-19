@@ -59,7 +59,9 @@
     <Compile Include="Scripts\Entities\AI\BuilderAI.cs" />
     <Compile Include="Scripts\Entities\AI\FarmerAI.cs" />
     <Compile Include="Scripts\Entities\Character.cs" />
+    <Compile Include="Scripts\Entities\InventoryManager.cs" />
     <Compile Include="Scripts\Entities\States\BuildState.cs" />
+    <Compile Include="Scripts\Entities\States\DropOffState.cs" />
     <Compile Include="Scripts\Entities\States\FarmingState.cs" />
     <Compile Include="Scripts\Entities\States\IdleState.cs" />
     <Compile Include="Scripts\Entities\States\IState.cs" />

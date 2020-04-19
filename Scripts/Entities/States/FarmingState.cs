@@ -13,10 +13,13 @@ public class FarmingState : IState
 
     public void Process(Character target, float delta)
     {
-        if (target.Stats.GetStat(Stat.Energy) == 0)
+        if (target.Stats[Stat.Energy] == 0)
         {
-            target.AI.InterruptState(new MovingState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall)));
-            target.AI.FutureState(new RelaxState());
+            target.Inventory.GainItem(Item.Wheat, WorkingFarmland.Storage[Item.Wheat]);
+            WorkingFarmland.Storage.LoseItem(Item.Wheat, WorkingFarmland.Storage[Item.Wheat]);
+
+            target.AI.SetState(new RelaxState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall)));
+            target.AI.FutureState(new DropOffState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall), Item.Wheat));
         }
 
         if (target.GlobalPosition.DistanceTo(WorkingFarmland.GlobalPosition) > 10)
@@ -25,7 +28,7 @@ public class FarmingState : IState
         }
         else
         {
-            (WorkingFarmland.BuildType as Farmland).IncreaseStockpile(1 * delta);
+            WorkingFarmland.Storage.GainItem(Item.Wheat, 1 * delta);
             target.Stats.ReduceStat(Stat.Energy, 10 * delta);
         }
     }
@@ -36,6 +39,6 @@ public class FarmingState : IState
 
     public string GetDebugInfo()
     {
-        return (WorkingFarmland.BuildType as Farmland).WheatStockpile.ToString();
+        return WorkingFarmland.Storage[Item.Wheat].ToString("#.##");
     }
 }

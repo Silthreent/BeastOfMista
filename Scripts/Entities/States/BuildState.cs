@@ -21,10 +21,11 @@ public class BuildState : IState
 
     public void Process(Character target, float delta)
     {
-        if (target.Stats.GetStat(Stat.Energy) == 0)
+        if (target.Stats[Stat.Energy] == 0)
         {
-            target.AI.InterruptState(new MovingState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall)));
-            target.AI.FutureState(new RelaxState());
+            target.AI.SetState(new RelaxState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall)));
+            target.AI.FutureState(this);
+            return;
         }
 
         if (FrameWait)

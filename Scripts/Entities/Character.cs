@@ -9,6 +9,7 @@ public class Character : Area2D
 	public Random RNG { get; protected set; }
 	public Building CurrentLocation { get; set; }
 	public StatManager Stats { get; protected set; }
+	public InventoryManager Inventory { get; protected set; }
 
 	Label DebugStateLabel;
 	Label DebugStatLabel;
@@ -17,6 +18,7 @@ public class Character : Area2D
 	{
 		RNG = new Random();
 		Stats = new StatManager();
+		Inventory = new InventoryManager();
 
 		AI = new BuilderAI(this);
 	}
@@ -36,7 +38,7 @@ public class Character : Area2D
 		foreach(Stat x in Enum.GetValues(typeof(Stat)))
 		{
 			builder.Append(x.ToString() + ": ");
-			builder.Append(Stats.GetStat(x).ToString("#.##"));
+			builder.Append(Stats[x].ToString("#.##"));
 			builder.Append('\n');
 		}
 		DebugStatLabel.Text = builder.ToString();

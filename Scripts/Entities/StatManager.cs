@@ -11,8 +11,7 @@ public class StatManager
 
         foreach(Stat x in Enum.GetValues(typeof(Stat)))
         {
-            StatList.Add(x, 0);
-            StatList[x] = 100;
+            StatList.Add(x, 100);
         }
     }
 
@@ -36,9 +35,12 @@ public class StatManager
         }
     }
 
-    public float GetStat(Stat stat)
+    public float this[Stat stat]
     {
-        return StatList[stat];
+        get
+        {
+            return StatList[stat];
+        }
     }
 }
 
