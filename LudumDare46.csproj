@@ -71,6 +71,7 @@
     <Compile Include="Scripts\World\Buildings\Building.cs" />
     <Compile Include="Scripts\World\Buildings\BuildingType.cs" />
     <Compile Include="Scripts\World\Buildings\Farmland.cs" />
+    <Compile Include="Scripts\World\Buildings\House.cs" />
     <Compile Include="Scripts\World\Buildings\TownHall.cs" />
     <Compile Include="Scripts\World\WorldManager.cs" />
   </ItemGroup>

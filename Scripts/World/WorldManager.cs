@@ -9,11 +9,13 @@ public class WorldManager : Node2D
 
 	public static WorldManager World { get; protected set; }
 	public Navigation2D NavMesh { get; protected set; }
+	public Random GlobalRNG { get; protected set; }
 
 	Node2D BuildingNode;
 	Node2D CharacterNode;
 	List<Building> Buildings;
 	List<Character> Villagers;
+
 
 	public WorldManager()
 	{
@@ -21,6 +23,8 @@ public class WorldManager : Node2D
 
 		Buildings = new List<Building>();
 		Villagers = new List<Character>();
+
+		GlobalRNG = new Random();
 	}
 
 	public override void _Ready()
@@ -49,13 +53,13 @@ public class WorldManager : Node2D
 			building.SetBuildingType(new TownHall());
 			building.Storage.GainItem(Item.Wheat, 1000);
 		}
-		else if (GetBuildingType(x => x.BuildType is Farmland).Length < Villagers.Count / 3f)
+		else if (GetBuildingType(x => x.BuildType is Farmland).Length < Villagers.Count / 2f)
 		{
 			building.SetBuildingType(new Farmland());
 		}
 		else
 		{
-			building.SetBuildingType(new BuildingType());
+			building.SetBuildingType(new House());
 		}
 
 		return building;

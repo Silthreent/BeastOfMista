@@ -31,5 +31,8 @@ public class FarmerAI : BaseAI
             x => x.IsCompleted
         && (x.BuildType is Farmland)
         && (x.BuildType as Farmland).AssignedWorker == null);
+
+        if(AssignedLand != null)
+            (AssignedLand.BuildType as Farmland).AssignWorker(Owner);
     }
 }

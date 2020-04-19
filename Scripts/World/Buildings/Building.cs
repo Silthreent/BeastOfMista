@@ -60,6 +60,8 @@ public class Building : Node2D
 	{
 		Sprite.Visible = true;
 		IsCompleted = true;
+
+		BuildType.FinishedBuilding(this);
 	}
 
 	void EnterBuilding(Character character)

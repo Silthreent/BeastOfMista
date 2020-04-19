@@ -21,8 +21,7 @@ public class FarmingState : IState
             target.AI.SetState(new RelaxState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall)));
             target.AI.FutureState(new DropOffState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall), Item.Wheat));
         }
-
-        if (target.GlobalPosition.DistanceTo(WorkingFarmland.GlobalPosition) > 10)
+        else if (target.GlobalPosition.DistanceTo(WorkingFarmland.GlobalPosition) > 10)
         {
             target.AI.InterruptState(new MovingState(WorkingFarmland.GlobalPosition));
         }
