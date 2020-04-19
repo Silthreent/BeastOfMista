@@ -46,7 +46,7 @@ public class BuildState : IState
                 else
                 {
                     GD.Print("INVALID; FINDING NEW LOCATION");
-                    Location = target.GlobalPosition + new Vector2(target.RNG.Next(25, 100), target.RNG.Next(25, 100));
+                    Location = target.GlobalPosition + new Vector2(target.RNG.Next(-50, 50), target.RNG.Next(-50, 50));
                     target.AI.InterruptState(new MovingState(Location));
                     FrameWait = true;
                 }

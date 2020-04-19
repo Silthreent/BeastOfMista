@@ -28,7 +28,7 @@ public class FarmingState : IState
         }
         else
         {
-            WorkingFarmland.Storage.GainItem(Item.Wheat, 1 * delta);
+            WorkingFarmland.Storage.GainItem(Item.Wheat, 10 * delta);
             target.Stats.ReduceStat(Stat.Energy, 10 * delta);
         }
     }

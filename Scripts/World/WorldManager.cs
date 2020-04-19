@@ -30,11 +30,9 @@ public class WorldManager : Node2D
 		BuildingNode = GetNode<Node2D>("Buildings");
 		CharacterNode = GetNode<Node2D>("Characters");
 
-		var builder1 = CreateVillager();
-		builder1.SetJob(new BuilderAI(builder1));
-
-		var builder2 = CreateVillager();
-		builder2.SetJob(new BuilderAI(builder2));
+		var builder = CreateVillager();
+		builder.SetJob(new BuilderAI(builder));
+		builder.Inventory.GainItem(Item.Wheat, 300);
 
 		var farmer = CreateVillager();
 		farmer.SetJob(new FarmerAI(farmer));
@@ -49,6 +47,7 @@ public class WorldManager : Node2D
 		if (GetBuilding(x => x.BuildType is TownHall) == null)
 		{
 			building.SetBuildingType(new TownHall());
+			building.Storage.GainItem(Item.Wheat, 1000);
 		}
 		else if (GetBuildingType(x => x.BuildType is Farmland).Length < Villagers.Count / 3f)
 		{
