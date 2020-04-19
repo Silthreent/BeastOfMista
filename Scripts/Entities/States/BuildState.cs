@@ -9,16 +9,14 @@ public class BuildState : IState
     float BuildTime;
     bool FrameWait = true;
 
-    public BuildState(Vector2 buildLocation)
+    public BuildState(Vector2 buildLocation, Building building)
     {
         Location = buildLocation;
+        Building = building;
     }
 
     public void Start(Character target)
     {
-        if(Building == null)
-            Building = WorldManager.World.CreateBuilding();
-
         Building.GlobalPosition = Location;
     }
 
@@ -52,6 +50,7 @@ public class BuildState : IState
                 BuildTime += delta;
                 if (BuildTime >= 2)
                 {
+                    Building.CompleteBuilding();
                     target.AI.FinishState();
                 }
                 break;

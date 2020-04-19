@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 public class WorldManager : Node2D
@@ -51,9 +52,17 @@ public class WorldManager : Node2D
 		polyMesh.Enabled = true;
 	}
 
-	public Building GetBuilding()
+	public Building GetBuilding(Predicate<Building> check)
 	{
-		return Buildings[0];
+		foreach(var x in Buildings)
+		{
+			if(check(x))
+			{
+				return x;
+			}
+		}
+
+		return null;
 	}
 
 	public override void _UnhandledKeyInput(InputEventKey input)

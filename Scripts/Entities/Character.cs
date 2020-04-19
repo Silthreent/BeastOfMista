@@ -6,6 +6,7 @@ public class Character : Node2D
 	public float MovementSpeed { get; protected set; } = 150f;
 	public BaseAI AI { get; protected set; }
 	public Random RNG { get; protected set; }
+	public Building CurrentLocation { get; protected set; }
 
 	Label DebugStateLabel;
 

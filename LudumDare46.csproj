@@ -62,7 +62,9 @@
     <Compile Include="Scripts\Entities\States\IdleState.cs" />
     <Compile Include="Scripts\Entities\States\IState.cs" />
     <Compile Include="Scripts\Entities\States\MovingState.cs" />
-    <Compile Include="Scripts\World\Building.cs" />
+    <Compile Include="Scripts\World\Buildings\Building.cs" />
+    <Compile Include="Scripts\World\Buildings\BuildingType.cs" />
+    <Compile Include="Scripts\World\Buildings\TownHall.cs" />
     <Compile Include="Scripts\World\WorldManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
