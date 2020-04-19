@@ -39,13 +39,11 @@ public class BuildState : IState
             case BuildJob.FindingLocation:
                 if (Building.InteractArea.GetOverlappingAreas().Count == 1)
                 {
-                    GD.Print("GOOD LOCATION");
                     Job = BuildJob.Building;
                     WorldManager.World.RegisterBuilding(Building);
                 }
                 else
                 {
-                    GD.Print("INVALID; FINDING NEW LOCATION");
                     Location = target.GlobalPosition + new Vector2(target.RNG.Next(-50, 50), target.RNG.Next(-50, 50));
                     target.AI.InterruptState(new MovingState(Location));
                     FrameWait = true;

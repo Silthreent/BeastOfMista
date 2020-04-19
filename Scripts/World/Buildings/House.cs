@@ -4,7 +4,7 @@ public class House : BuildingType
     {
         SpriteLocation = "House";
 
-        MaxBuildProgress = 15f;
+        MaxBuildProgress = 25f;
     }
 
     public override void FinishedBuilding(Building building)

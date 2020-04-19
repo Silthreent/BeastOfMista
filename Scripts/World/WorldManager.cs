@@ -51,7 +51,7 @@ public class WorldManager : Node2D
 		if (GetBuilding(x => x.BuildType is TownHall) == null)
 		{
 			building.SetBuildingType(new TownHall());
-			building.Storage.GainItem(Item.Wheat, 1000);
+			building.Storage.GainItem(Item.Wheat, 2500);
 		}
 		else if (GetBuildingType(x => x.BuildType is Farmland).Length < Villagers.Count / 2f)
 		{
@@ -91,6 +91,11 @@ public class WorldManager : Node2D
 	public Building[] GetBuildingType(Predicate<Building> check)
 	{
 		return Buildings.FindAll(check).ToArray();
+	}
+
+	public int GetBuildingCount()
+	{
+		return Buildings.Count;
 	}
 
 	public Character CreateVillager()

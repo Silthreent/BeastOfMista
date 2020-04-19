@@ -2,6 +2,8 @@ using Godot;
 
 public class BuilderAI : BaseAI
 {
+    const int BUILDING_RNG_MODIFIER = 3;
+
     public BuilderAI(Character owner) : base(owner)
     {
     }
@@ -49,7 +51,9 @@ public class BuilderAI : BaseAI
     {
         Building newBuilding = WorldManager.World.CreateBuilding();
 
-        var searchLocation = Owner.GlobalPosition + new Vector2(Owner.RNG.Next(-200, 200), Owner.RNG.Next(-200, 200));
+        var searchLocation = Owner.GlobalPosition + new Vector2(Owner.RNG.Next(
+            -75 * (WorldManager.World.GetBuildingCount() / BUILDING_RNG_MODIFIER), 75 * (WorldManager.World.GetBuildingCount() / BUILDING_RNG_MODIFIER)),
+            Owner.RNG.Next(-75 * (WorldManager.World.GetBuildingCount() / BUILDING_RNG_MODIFIER), 75 * (WorldManager.World.GetBuildingCount() / BUILDING_RNG_MODIFIER)));
         searchLocation = WorldManager.World.NavMesh.GetClosestPoint(searchLocation);
 
         GD.Print($"Building new at {searchLocation}");

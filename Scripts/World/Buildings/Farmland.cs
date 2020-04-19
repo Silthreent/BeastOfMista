@@ -6,7 +6,7 @@ public class Farmland : BuildingType
     {
         SpriteLocation = "Farmland";
 
-        MaxBuildProgress = 2f;
+        MaxBuildProgress = 15f;
     }
 
     public void AssignWorker(Character character)
