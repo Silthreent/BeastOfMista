@@ -12,7 +12,7 @@ public class StatManager
         foreach(Stat x in Enum.GetValues(typeof(Stat)))
         {
             StatList.Add(x, 0);
-            StatList[x] = 25;
+            StatList[x] = 100;
         }
     }
 

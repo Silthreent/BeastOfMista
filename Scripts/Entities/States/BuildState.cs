@@ -6,7 +6,6 @@ public class BuildState : IState
     Building Building;
     BuildJob Job;
 
-    float BuildTime;
     bool FrameWait = true;
 
     public BuildState(Vector2 buildLocation, Building building)
@@ -59,11 +58,11 @@ public class BuildState : IState
                 }
                 else
                 {
-                    BuildTime += delta;
+                    Building.ProgressProgress(delta);
                     target.Stats.ReduceStat(Stat.Energy, 5 * delta);
-                    if (BuildTime >= 2)
+
+                    if (Building.IsCompleted)
                     {
-                        Building.CompleteBuilding();
                         target.AI.FinishState();
                     }
                 }
@@ -77,7 +76,7 @@ public class BuildState : IState
 
     public string GetDebugInfo()
     {
-        return Job.ToString() + "|" + BuildTime.ToString("#.##");
+        return Job.ToString() + "|" + Building.BuildProgress.ToString("#.##") + "/" + Building.BuildType.MaxBuildProgress;
     }
 
     enum BuildJob

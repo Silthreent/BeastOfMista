@@ -12,7 +12,7 @@ script = ExtResource( 1 )
 [node name="PathCollider" type="Polygon2D" parent="."]
 visible = false
 color = Color( 0.52549, 0.192157, 0.192157, 1 )
-polygon = PoolVector2Array( -65.9513, -33.6936, 65.9764, -34.7131, 66.1457, 34.8897, 11.8077, 34.4991, 11.359, -6.36939, -10.2754, -6.53864, -9.9073, 34.4991, -65.7474, 33.7995 )
+polygon = PoolVector2Array( -66.2859, -34.7656, 65.9764, -34.7131, 66.1457, 34.8897, 8.75964, 34.8398, 8.48908, -17.3767, -8.82622, -17.512, -8.55566, 33.8928, -66.1832, 33.8928 )
 
 [node name="Sprite" type="Sprite" parent="."]
 visible = false

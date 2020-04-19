@@ -6,6 +6,8 @@ public class Building : Node2D
 	public Polygon2D PathCollider { get; protected set; }
 	public Area2D InteractArea { get; protected set; }
 	public BuildingType BuildType { get; protected set; }
+	public float BuildProgress { get; protected set; }
+	public bool IsCompleted { get; protected set; } = false;
 
 	Sprite Sprite;
 	List<Character> InsideBuilding;
@@ -25,9 +27,12 @@ public class Building : Node2D
 
 	public override void _Process(float delta)
 	{
-		foreach(var x in InsideBuilding)
+		if(IsCompleted)
 		{
-			BuildType.ProcessPatron(x, delta);
+			foreach (var x in InsideBuilding)
+			{
+				BuildType.ProcessPatron(x, delta);
+			}
 		}
 	}
 
@@ -39,9 +44,20 @@ public class Building : Node2D
 		}
 	}
 
+	public void ProgressProgress(float amount)
+	{
+		BuildProgress += amount;
+
+		if (BuildProgress >= BuildType.MaxBuildProgress)
+		{
+			CompleteBuilding();
+		}
+	}
+
 	public void CompleteBuilding()
 	{
 		Sprite.Visible = true;
+		IsCompleted = true;
 	}
 
 	void EnterBuilding(Character character)

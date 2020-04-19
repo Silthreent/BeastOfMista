@@ -3,6 +3,8 @@ public class TownHall : BuildingType
     public TownHall()
     {
         SpriteLocation = "TownHall";
+
+        MaxBuildProgress = 5f;
     }
 
     public override void ProcessPatron(Character character, float delta)

@@ -9,12 +9,14 @@ public class WorldManager : Node2D
 
 	Node2D BuildingNode;
 	List<Building> Buildings;
+	List<Character> Villagers;
 
 	public WorldManager()
 	{
 		World = this;
 
 		Buildings = new List<Building>();
+		Villagers = new List<Character>();
 	}
 
 	public override void _Ready()
@@ -54,15 +56,17 @@ public class WorldManager : Node2D
 
 	public Building GetBuilding(Predicate<Building> check)
 	{
-		foreach(var x in Buildings)
-		{
-			if(check(x))
-			{
-				return x;
-			}
-		}
+		return Buildings.Find(check);
+	}
 
-		return null;
+	public Building[] GetBuildingType(Predicate<Building> check)
+	{
+		return Buildings.FindAll(check).ToArray();
+	}
+
+	public int GetVillagerCount()
+	{
+		return Villagers.Count;
 	}
 
 	public override void _UnhandledKeyInput(InputEventKey input)
