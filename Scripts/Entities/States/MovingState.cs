@@ -2,6 +2,8 @@ using Godot;
 
 public class MovingState : IState
 {
+    Building TargetBuilding;
+
     Vector2 Target;
     Vector2[] CurrentPath;
     int PathMarker;
@@ -11,9 +13,17 @@ public class MovingState : IState
         Target = target;
     }
 
+    public MovingState(Building building)
+    {
+        TargetBuilding = building;
+        Target = building.Entrance.GlobalPosition;
+    }
+
     public void Start(Character target)
     {
         CurrentPath = WorldManager.World.NavMesh.GetSimplePath(target.GlobalPosition, Target);
+
+        target.LeaveLocation();
     }
 
     public void Process(Character target, float delta)
@@ -31,6 +41,8 @@ public class MovingState : IState
 
     public void End(Character target)
     {
+        if(TargetBuilding != null)
+            TargetBuilding.EnterBuilding(target);
     }
 
     public string GetDebugInfo()

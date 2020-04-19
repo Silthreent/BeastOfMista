@@ -22,6 +22,12 @@ public class BuildState : IState
 
     public void Process(Character target, float delta)
     {
+        if (target.Stats.GetStat(Stat.Energy) == 0)
+        {
+            target.AI.InterruptState(new MovingState(WorldManager.World.GetBuilding(x => x.BuildType is TownHall)));
+            target.AI.FutureState(new RelaxState());
+        }
+
         if (FrameWait)
         {
             FrameWait = false;
@@ -47,11 +53,19 @@ public class BuildState : IState
                 break;
 
             case BuildJob.Building:
-                BuildTime += delta;
-                if (BuildTime >= 2)
+                if(target.GlobalPosition.DistanceTo(Building.Entrance.GlobalPosition) > 10)
                 {
-                    Building.CompleteBuilding();
-                    target.AI.FinishState();
+                    target.AI.InterruptState(new MovingState(Building.Entrance.GlobalPosition));
+                }
+                else
+                {
+                    BuildTime += delta;
+                    target.Stats.ReduceStat(Stat.Energy, 5 * delta);
+                    if (BuildTime >= 2)
+                    {
+                        Building.CompleteBuilding();
+                        target.AI.FinishState();
+                    }
                 }
                 break;
         }

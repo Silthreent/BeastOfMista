@@ -1,26 +1,52 @@
 using Godot;
 using System;
+using System.Text;
 
 public class Character : Node2D
 {
 	public float MovementSpeed { get; protected set; } = 150f;
 	public BaseAI AI { get; protected set; }
 	public Random RNG { get; protected set; }
-	public Building CurrentLocation { get; protected set; }
+	public Building CurrentLocation { get; set; }
+	public StatManager Stats { get; protected set; }
 
 	Label DebugStateLabel;
+	Label DebugStatLabel;
+
+	public Character()
+	{
+		RNG = new Random();
+		Stats = new StatManager();
+
+		AI = new BuilderAI(this);
+	}
 
 	public override void _Ready()
 	{
-		RNG = new Random();
-
-		AI = new BuilderAI(this);
 		DebugStateLabel = FindNode("DebugLabel") as Label;
+		DebugStatLabel = FindNode("StatLabel") as Label;
+	}
+
+	public void LeaveLocation()
+	{
+		if(CurrentLocation != null)
+		{
+			CurrentLocation.ExitBuilding(this);
+		}
 	}
 
 	public override void _Process(float delta)
 	{
 		AI.Process(delta);
 		DebugStateLabel.Text = AI.CurrentState.GetType().ToString() + "\n" + AI.CurrentState.GetDebugInfo();
+
+		StringBuilder builder = new StringBuilder();
+		foreach(Stat x in Enum.GetValues(typeof(Stat)))
+		{
+			builder.Append(x.ToString() + ": ");
+			builder.Append(Stats.GetStat(x).ToString("#.##"));
+			builder.Append('\n');
+		}
+		DebugStatLabel.Text = builder.ToString();
 	}
 }

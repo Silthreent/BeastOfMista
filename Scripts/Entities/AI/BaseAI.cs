@@ -32,6 +32,11 @@ public class BaseAI
         CurrentState.Start(Owner);
     }
 
+    public void FutureState(IState state)
+    {
+        NextState = state;
+    }
+
     public void InterruptState(IState state)
     {
         PreviousState = CurrentState;
@@ -41,8 +46,6 @@ public class BaseAI
 
     public void FinishState()
     {
-        CurrentState.End(Owner);
-
         if(NextState != null)
         {
             SetState(NextState);

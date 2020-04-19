@@ -4,4 +4,9 @@ public class TownHall : BuildingType
     {
         SpriteLocation = "TownHall";
     }
+
+    public override void ProcessPatron(Character character, float delta)
+    {
+        character.Stats.RestoreStat(Stat.Energy, 10 * delta);
+    }
 }
