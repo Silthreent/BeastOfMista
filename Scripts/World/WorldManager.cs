@@ -24,12 +24,27 @@ public class WorldManager : Node2D
 		NavMesh = FindNode("NavMesh") as Navigation2D;
 
 		BuildingNode = GetNode<Node2D>("Buildings");
+
+		Villagers.Add(FindNode("Character") as Character);
 	}
 
 	public Building CreateBuilding()
 	{
 		var building = ResourceLoader.Load<PackedScene>(@"Scenes\World\Building.tscn").Instance() as Building;
 		BuildingNode.AddChild(building);
+
+		if (GetBuilding(x => x.BuildType is TownHall) == null)
+		{
+			building.SetBuildingType(new TownHall());
+		}
+		else if (GetBuildingType(x => x.BuildType is Farmland).Length < Villagers.Count / 3f)
+		{
+			building.SetBuildingType(new Farmland());
+		}
+		else
+		{
+			building.SetBuildingType(new BuildingType());
+		}
 
 		return building;
 	}
