@@ -13,4 +13,9 @@ public class Farmland : BuildingType
     {
         AssignedWorker = character;
     }
+
+    public override void VillagerDied(Character villager)
+    {
+        AssignedWorker = null;
+    }
 }

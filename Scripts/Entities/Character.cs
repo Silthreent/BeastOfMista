@@ -4,12 +4,16 @@ using System.Text;
 
 public class Character : Area2D
 {
-	public float MovementSpeed { get; protected set; } = 150f;
+	[Signal]
+	public delegate void VillagerDied(Character villager);
+
+	public float MovementSpeed { get; set; } = 150f;
 	public BaseAI AI { get; protected set; }
 	public Random RNG { get; protected set; }
 	public Building CurrentLocation { get; set; }
 	public StatManager Stats { get; protected set; }
 	public InventoryManager Inventory { get; protected set; }
+	public Area2D SenseDistance { get; protected set; }
 
 	Label DebugStateLabel;
 	Label DebugStatLabel;
@@ -27,6 +31,10 @@ public class Character : Area2D
 	{
 		DebugStateLabel = FindNode("DebugLabel") as Label;
 		DebugStatLabel = FindNode("StatLabel") as Label;
+
+		SenseDistance = FindNode("SenseDistance") as Area2D;
+
+		Connect("area_entered", this, "OnAreaEntered");
 	}
 
 	public override void _Process(float delta)
@@ -44,8 +52,25 @@ public class Character : Area2D
 		DebugStatLabel.Text = builder.ToString();
 	}
 
+	public void SetSprite(string name)
+	{
+		GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<Texture>($@"Assets\Sprites\Characters\{name}.png");
+	}
+
 	public void SetJob(BaseAI job)
 	{
 		AI = job;
+	}
+
+	public void Kill()
+	{
+		EmitSignal("VillagerDied", this);
+
+		QueueFree();
+	}
+
+	void OnAreaEntered(Area2D area)
+	{
+		AI.CheckCollision(area);
 	}
 }

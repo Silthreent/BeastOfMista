@@ -12,12 +12,15 @@ public class WorldManager : Node2D
 	public static WorldManager World { get; protected set; }
 	public Navigation2D NavMesh { get; protected set; }
 	public Random GlobalRNG { get; protected set; }
+	public Building BeastCave { get; protected set; }
 
+	Camera2D Camera;
 	Building TownHall;
 	Node2D BuildingNode;
 	Node2D CharacterNode;
 	List<Building> Buildings;
 	List<Character> Villagers;
+	Character Beast;
 
 	CursorMode Cursor;
 
@@ -35,6 +38,7 @@ public class WorldManager : Node2D
 	{
 		NavMesh = FindNode("NavMesh") as Navigation2D;
 
+		Camera = FindNode("Camera") as Camera2D;
 		BuildingNode = GetNode<Node2D>("Buildings");
 		CharacterNode = GetNode<Node2D>("Characters");
 
@@ -44,17 +48,24 @@ public class WorldManager : Node2D
 
 		var farmer = CreateVillager();
 		farmer.SetJob(new FarmerAI(farmer));
+
+		BeastCave = ResourceLoader.Load<PackedScene>(@"Scenes\World\Building.tscn").Instance() as Building;
+		BuildingNode.AddChild(BeastCave);
+		BeastCave.SetBuildingType(new BeastCave());
+		BeastCave.ProgressProgress(10000);
+		BeastCave.GlobalPosition = new Vector2(GlobalRNG.Next(700, 750), GlobalRNG.Next(700, 750));
+		RegisterBuilding(BeastCave);
+
+		Beast = CharacterScene.Instance() as Character;
+		Beast.SetJob(new BeastAI(Beast));
+		AddChild(Beast);
+		Beast.GlobalPosition = BeastCave.GlobalPosition;
+		Beast.SetSprite("Beast");
+		Beast.MovementSpeed = 175f;
 	}
 
 	public Building GetNextBuildProject()
 	{
-		var inprogress = GetBuilding(x => !x.IsFunctional && x.AssignedBuilder == null);
-		if (inprogress != null)
-		{
-			GetTownHall().Storage.LoseItem(Item.Wheat, REQUIRED_BUILDING_MATERIALS / inprogress.BuildType.MaxBuildProgress);
-			return inprogress;
-		}
-
 		if (GetTownHall() == null)
 		{
 			var build = CreateBuilding();
@@ -64,7 +75,15 @@ public class WorldManager : Node2D
 
 			return build;
 		}
-		else if(GetTownHall().Storage[Item.Wheat] >= REQUIRED_BUILDING_MATERIALS)
+
+		var inprogress = GetBuilding(x => !x.IsFunctional && x.AssignedBuilder == null);
+		if (inprogress != null)
+		{
+			GetTownHall().Storage.LoseItem(Item.Wheat, REQUIRED_BUILDING_MATERIALS / inprogress.BuildType.MaxBuildProgress);
+			return inprogress;
+		}
+		
+		if(GetTownHall().Storage[Item.Wheat] >= REQUIRED_BUILDING_MATERIALS)
 		{
 			GetTownHall().Storage.LoseItem(Item.Wheat, REQUIRED_BUILDING_MATERIALS);
 
@@ -137,11 +156,16 @@ public class WorldManager : Node2D
 	public Character CreateVillager()
 	{
 		var newVillager = CharacterScene.Instance() as Character;
-
+		newVillager.Connect("VillagerDied", this, "OnVillagerDied");
 		Villagers.Add(newVillager);
 		CharacterNode.AddChild(newVillager);
 
 		return newVillager;
+	}
+
+	public void OnVillagerDied(Character character)
+	{
+		Villagers.Remove(character);
 	}
 
 	public int GetVillagerCount()
@@ -160,9 +184,9 @@ public class WorldManager : Node2D
 
 	public override void _UnhandledKeyInput(InputEventKey input)
 	{
-		if(input.IsActionPressed("unlock_cursor"))
+		if (input.IsActionPressed("unlock_cursor"))
 		{
-			if(Input.GetMouseMode() == Input.MouseMode.Confined)
+			if (Input.GetMouseMode() == Input.MouseMode.Confined)
 			{
 				Input.SetMouseMode(Input.MouseMode.Visible);
 			}
@@ -171,12 +195,48 @@ public class WorldManager : Node2D
 				Input.SetMouseMode(Input.MouseMode.Confined);
 			}
 		}
-		else if(input.IsActionPressed("cursor_destroy"))
+		else if (input.IsActionPressed("cursor_destroy"))
 		{
 			if (Cursor != CursorMode.Destroy)
 				Cursor = CursorMode.Destroy;
 			else
 				Cursor = CursorMode.Nothing;
+		}
+		else if (input.IsActionPressed("switch_view"))
+		{
+			var beastDistance = Camera.GlobalPosition.DistanceTo(Beast.GlobalPosition);
+			var townhallDistance = Camera.GlobalPosition.DistanceTo(GetTownHall() == null ? new Vector2(0, 0) : GetTownHall().GlobalPosition);
+
+			if(beastDistance > townhallDistance)
+			{
+				Camera.GlobalPosition = Beast.GlobalPosition;
+			}
+			else
+			{
+				Camera.GlobalPosition = GetTownHall() == null ? new Vector2(0, 0) : GetTownHall().GlobalPosition;
+			}
+		}
+		else if(input.IsActionPressed("release_beast"))
+		{
+			var hunt = new HuntState();
+			GD.Print("Required hunger: " + (100 - (((Beast.AI as BeastAI).Hunger - 100) / 2)));
+			hunt.RequiredHunger = 100 - (((Beast.AI as BeastAI).Hunger - 100) / 2);
+			Beast.AI.SetState(hunt);
+		}
+		else if (input.IsActionPressed("return_beast"))
+		{
+			if(Beast.AI.CurrentState is HuntState)
+			{
+				if((Beast.AI as BeastAI).Hunger < (Beast.AI.CurrentState as HuntState).RequiredHunger)
+				{
+					Beast.AI.SetState(new MovingState(BeastCave));
+				}
+				else
+				{
+					GD.Print("TOO HUNGRY");
+				}
+			}
+
 		}
 	}
 }

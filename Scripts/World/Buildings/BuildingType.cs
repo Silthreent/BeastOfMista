@@ -5,4 +5,5 @@ public class BuildingType
 
     public virtual void ProcessPatron(Character character, float delta) { }
     public virtual void FinishedBuilding(Building building) { }
+    public virtual void VillagerDied(Character character) { }
 }

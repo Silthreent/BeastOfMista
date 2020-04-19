@@ -56,6 +56,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Camera.cs" />
     <Compile Include="Scripts\Entities\AI\BaseAI.cs" />
+    <Compile Include="Scripts\Entities\AI\BeastAI.cs" />
     <Compile Include="Scripts\Entities\AI\BuilderAI.cs" />
     <Compile Include="Scripts\Entities\AI\FarmerAI.cs" />
     <Compile Include="Scripts\Entities\Character.cs" />
@@ -63,12 +64,14 @@
     <Compile Include="Scripts\Entities\States\BuildState.cs" />
     <Compile Include="Scripts\Entities\States\DropOffState.cs" />
     <Compile Include="Scripts\Entities\States\FarmingState.cs" />
+    <Compile Include="Scripts\Entities\States\HuntState.cs" />
     <Compile Include="Scripts\Entities\States\IdleState.cs" />
     <Compile Include="Scripts\Entities\States\IState.cs" />
     <Compile Include="Scripts\Entities\States\MovingState.cs" />
     <Compile Include="Scripts\Entities\States\RelaxState.cs" />
     <Compile Include="Scripts\Entities\States\RepairState.cs" />
     <Compile Include="Scripts\Entities\StatManager.cs" />
+    <Compile Include="Scripts\World\Buildings\BeastCave.cs" />
     <Compile Include="Scripts\World\Buildings\Building.cs" />
     <Compile Include="Scripts\World\Buildings\BuildingType.cs" />
     <Compile Include="Scripts\World\Buildings\Farmland.cs" />

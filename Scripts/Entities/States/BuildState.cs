@@ -37,17 +37,20 @@ public class BuildState : IState
         switch (Job)
         {
             case BuildJob.FindingLocation:
-                if (Building.InteractArea.GetOverlappingAreas().Count == 1)
+                foreach(var x in Building.InteractArea.GetOverlappingAreas())
                 {
-                    Job = BuildJob.Building;
-                    WorldManager.World.RegisterBuilding(Building);
+                    if((x as Node2D).GetParent() is Building)
+                    {
+                        Location = target.GlobalPosition + new Vector2(target.RNG.Next(-50, 50), target.RNG.Next(-50, 50));
+                        target.AI.InterruptState(new MovingState(Location));
+                        FrameWait = true;
+
+                        return;
+                    }
                 }
-                else
-                {
-                    Location = target.GlobalPosition + new Vector2(target.RNG.Next(-50, 50), target.RNG.Next(-50, 50));
-                    target.AI.InterruptState(new MovingState(Location));
-                    FrameWait = true;
-                }
+
+                Job = BuildJob.Building;
+                WorldManager.World.RegisterBuilding(Building);
                 break;
 
             case BuildJob.Building:

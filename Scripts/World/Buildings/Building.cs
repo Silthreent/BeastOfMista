@@ -21,7 +21,7 @@ public class Building : Node2D
 			}
 		} }
 	public InventoryManager Storage { get; protected set; }
-	public Character AssignedBuilder { get; set; }
+	public Character AssignedBuilder { get; protected set; }
 
 	Sprite Sprite;
 	List<Character> InsideBuilding;
@@ -84,6 +84,7 @@ public class Building : Node2D
 	void EnterBuilding(Character character)
 	{
 		InsideBuilding.Add(character);
+		character.Connect("VillagerDied", this, "OnVillagerDied");
 
 		character.CurrentLocation = this;
 	}
@@ -91,6 +92,7 @@ public class Building : Node2D
 	void ExitBuilding(Character character)
 	{
 		InsideBuilding.Remove(character);
+		character.Disconnect("VillagerDied", this, "OnVillagerDied");
 
 		if (character.CurrentLocation == this)
 			character.CurrentLocation = null;
@@ -101,6 +103,24 @@ public class Building : Node2D
 		BuildType = type;
 
 		Sprite.Texture = ResourceLoader.Load<Texture>($@"Assets\Sprites\Buildings\{type.SpriteLocation}.png");
+	}
+
+	public void AssignBuilder(Character character)
+	{
+		AssignedBuilder = character;
+		character.Connect("VillagerDied", this, "OnVillagerDied");
+	}
+
+	void OnVillagerDied(Character character)
+	{
+		ExitBuilding(character);
+
+		if(AssignedBuilder == character)
+		{
+			AssignedBuilder = null;
+		}
+
+		BuildType.VillagerDied(character);
 	}
 
 	void OnAreaEntered(Area2D area)

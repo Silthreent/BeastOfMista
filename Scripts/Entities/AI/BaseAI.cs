@@ -61,4 +61,14 @@ public class BaseAI
             SetState(new IdleState());
         }
     }
+
+    public virtual void CheckCollision(Area2D area)
+    {
+
+    }
+
+    public virtual void DeathCleanUp()
+    {
+
+    }
 }

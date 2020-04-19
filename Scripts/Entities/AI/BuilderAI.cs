@@ -46,7 +46,7 @@ public class BuilderAI : BaseAI
         {
             if(!newBuild.IsCompleted)
             {
-                newBuild.AssignedBuilder = Owner;
+                newBuild.AssignBuilder(Owner);
 
                 var searchLocation = Owner.GlobalPosition + new Vector2(Owner.RNG.Next(
                     -75 * (WorldManager.World.GetBuildingCount() / BUILDING_RNG_MODIFIER), 75 * (WorldManager.World.GetBuildingCount() / BUILDING_RNG_MODIFIER)),
@@ -59,7 +59,7 @@ public class BuilderAI : BaseAI
             }
             else
             {
-                newBuild.AssignedBuilder = Owner;
+                newBuild.AssignBuilder(Owner);
 
                 SetState(new RepairState(newBuild));
             }
