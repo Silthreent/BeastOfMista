@@ -37,7 +37,7 @@ public class BuildState : IState
         switch (Job)
         {
             case BuildJob.FindingLocation:
-                if (Building.InteractArea.GetOverlappingAreas().Count == 0)
+                if (Building.InteractArea.GetOverlappingAreas().Count == 1)
                 {
                     GD.Print("GOOD LOCATION");
                     Job = BuildJob.Building;
@@ -53,9 +53,9 @@ public class BuildState : IState
                 break;
 
             case BuildJob.Building:
-                if(target.GlobalPosition.DistanceTo(Building.Entrance.GlobalPosition) > 10)
+                if(target.GlobalPosition.DistanceTo(Building.GlobalPosition) > 10)
                 {
-                    target.AI.InterruptState(new MovingState(Building.Entrance.GlobalPosition));
+                    target.AI.InterruptState(new MovingState(Building.GlobalPosition));
                 }
                 else
                 {

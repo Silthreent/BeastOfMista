@@ -16,14 +16,12 @@ public class MovingState : IState
     public MovingState(Building building)
     {
         TargetBuilding = building;
-        Target = building.Entrance.GlobalPosition;
+        Target = building.GlobalPosition;
     }
 
     public void Start(Character target)
     {
         CurrentPath = WorldManager.World.NavMesh.GetSimplePath(target.GlobalPosition, Target);
-
-        target.LeaveLocation();
     }
 
     public void Process(Character target, float delta)
@@ -41,8 +39,6 @@ public class MovingState : IState
 
     public void End(Character target)
     {
-        if(TargetBuilding != null)
-            TargetBuilding.EnterBuilding(target);
     }
 
     public string GetDebugInfo()

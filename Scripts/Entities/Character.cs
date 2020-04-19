@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Text;
 
-public class Character : Node2D
+public class Character : Area2D
 {
 	public float MovementSpeed { get; protected set; } = 150f;
 	public BaseAI AI { get; protected set; }
@@ -25,14 +25,6 @@ public class Character : Node2D
 	{
 		DebugStateLabel = FindNode("DebugLabel") as Label;
 		DebugStatLabel = FindNode("StatLabel") as Label;
-	}
-
-	public void LeaveLocation()
-	{
-		if(CurrentLocation != null)
-		{
-			CurrentLocation.ExitBuilding(this);
-		}
 	}
 
 	public override void _Process(float delta)

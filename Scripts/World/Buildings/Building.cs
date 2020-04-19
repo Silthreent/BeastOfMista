@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class Building : Node2D
 {
-	public Node2D Entrance { get; protected set; }
 	public Polygon2D PathCollider { get; protected set; }
 	public Area2D InteractArea { get; protected set; }
 	public BuildingType BuildType { get; protected set; }
@@ -15,9 +14,11 @@ public class Building : Node2D
 	{
 		InsideBuilding = new List<Character>();
 
-		Entrance = FindNode("Entrance") as Node2D;
 		PathCollider = FindNode("PathCollider") as Polygon2D;
+
 		InteractArea = FindNode("InteractArea") as Area2D;
+		InteractArea.Connect("area_entered", this, "OnAreaEntered");
+		InteractArea.Connect("area_exited", this, "OnAreaExited");
 
 		Sprite = FindNode("Sprite") as Sprite;
 	}
@@ -43,20 +44,16 @@ public class Building : Node2D
 		Sprite.Visible = true;
 	}
 
-	public void EnterBuilding(Character character)
+	void EnterBuilding(Character character)
 	{
-		GD.Print($"{character} has entered {BuildType.GetType()}");
 		InsideBuilding.Add(character);
-		GD.Print(InsideBuilding.Count);
 
 		character.CurrentLocation = this;
 	}
 
-	public void ExitBuilding(Character character)
+	void ExitBuilding(Character character)
 	{
-		GD.Print($"{character} has left {BuildType.GetType()}");
 		InsideBuilding.Remove(character);
-		GD.Print(InsideBuilding.Count);
 
 		if(character.CurrentLocation == this)
 			character.CurrentLocation = null;
@@ -67,5 +64,21 @@ public class Building : Node2D
 		BuildType = type;
 
 		Sprite.Texture = ResourceLoader.Load<Texture>($@"Assets\Sprites\Buildings\{type.SpriteLocation}.png");
+	}
+
+	void OnAreaEntered(Area2D area)
+	{
+		if(area is Character)
+		{
+			EnterBuilding(area as Character);
+		}
+	}
+
+	void OnAreaExited(Area2D area)
+	{
+		if (area is Character)
+		{
+			ExitBuilding(area as Character);
+		}
 	}
 }
