@@ -10,6 +10,7 @@ script = ExtResource( 1 )
 texture = ExtResource( 2 )
 
 [node name="NavLine" type="Line2D" parent="."]
+visible = false
 default_color = Color( 0.0901961, 0.8, 0.2, 1 )
 
 [node name="DebugLabel" type="Label" parent="."]

@@ -1,15 +1,9 @@
 using Godot;
-using System;
 
 public class BuilderAI : BaseAI
 {
-    Random RNG;
-    bool BuildLocationSet = false;
-    Vector2 BuildLocation;
-
     public BuilderAI(Character owner) : base(owner)
     {
-        RNG = new Random();
     }
 
     public override void Process(float delta)
@@ -18,25 +12,13 @@ public class BuilderAI : BaseAI
 
         if(CurrentState is IdleState)
         {
-            if (!BuildLocationSet)
-            {
-                SetToBuild();
-                BuildLocationSet = true;
-            }
-            else
-            {
-                SetState(new BuildState(BuildLocation));
-                BuildLocationSet = false;
-            }
+            var searchLocation = Owner.GlobalPosition + new Vector2(Owner.RNG.Next(-200, 200), Owner.RNG.Next(-200, 200));
+            searchLocation = WorldManager.World.NavMesh.GetClosestPoint(searchLocation);
+
+            GD.Print($"Building at {searchLocation}");
+
+            SetState(new MovingState(searchLocation));
+            NextState = new BuildState(searchLocation);
         }
-    }
-
-    void SetToBuild()
-    {
-        var searchLocation = Owner.GlobalPosition + new Vector2(RNG.Next(-200, 200), RNG.Next(-200, 200));
-        BuildLocation = WorldManager.World.NavMesh.GetClosestPoint(searchLocation);
-
-        GD.Print($"Building at {BuildLocation}");
-        SetState(new MovingState(BuildLocation));
     }
 }

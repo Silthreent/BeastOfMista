@@ -25,7 +25,7 @@ public class MovingState : IState
         {
             PathMarker++;
             if (PathMarker >= CurrentPath.Length)
-                target.ForceState(new IdleState());
+                target.AI.FinishState();
         }
     }
 

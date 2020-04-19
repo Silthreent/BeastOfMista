@@ -3,6 +3,8 @@ using Godot;
 public class BaseAI
 {
     public IState CurrentState { get; protected set; }
+    public IState NextState { get; set; }
+    public IState PreviousState { get; set; }
 
     protected Character Owner;
 
@@ -30,11 +32,30 @@ public class BaseAI
         CurrentState.Start(Owner);
     }
 
+    public void InterruptState(IState state)
+    {
+        PreviousState = CurrentState;
+
+        SetState(state);
+    }
+
     public void FinishState()
     {
         CurrentState.End(Owner);
 
-        GD.Print($"Last state finished set to idle");
-        CurrentState = new IdleState();
+        if(NextState != null)
+        {
+            SetState(NextState);
+            NextState = null;
+        }
+        else if(PreviousState != null)
+        {
+            SetState(PreviousState);
+            PreviousState = null;
+        }
+        else
+        {
+            SetState(new IdleState());
+        }
     }
 }

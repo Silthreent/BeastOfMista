@@ -16,7 +16,9 @@ public class BuildState : IState
 
     public void Start(Character target)
     {
-        Building = WorldManager.World.CreateBuilding();
+        if(Building == null)
+            Building = WorldManager.World.CreateBuilding();
+
         Building.GlobalPosition = Location;
     }
 
@@ -35,17 +37,23 @@ public class BuildState : IState
                 {
                     GD.Print("GOOD LOCATION");
                     Job = BuildJob.Building;
+                    WorldManager.World.RegisterBuilding(Building);
                 }
                 else
                 {
-                    Building.Position += new Vector2(10, 0);
+                    GD.Print("INVALID; FINDING NEW LOCATION");
+                    Location = target.GlobalPosition + new Vector2(target.RNG.Next(25, 100), target.RNG.Next(25, 100));
+                    target.AI.InterruptState(new MovingState(Location));
+                    FrameWait = true;
                 }
                 break;
 
             case BuildJob.Building:
                 BuildTime += delta;
                 if (BuildTime >= 2)
-                    target.FinishState();
+                {
+                    target.AI.FinishState();
+                }
                 break;
         }
     }
@@ -56,7 +64,7 @@ public class BuildState : IState
 
     public string GetDebugInfo()
     {
-        return Job.ToString();
+        return Job.ToString() + "|" + BuildTime.ToString("#.##");
     }
 
     enum BuildJob
