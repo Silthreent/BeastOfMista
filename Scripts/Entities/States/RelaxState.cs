@@ -7,7 +7,7 @@ public class RelaxState : IState
 
     public void Process(Character target, float delta)
     {
-        if(target.Stats.GetStat(Stat.Energy) >= 85)
+        if(target.Stats.GetStat(Stat.Energy) >= 100)
         {
             target.AI.FinishState();
         }

@@ -4,10 +4,14 @@ using System.Collections.Generic;
 
 public class WorldManager : Node2D
 {
+	[Export]
+	public PackedScene CharacterScene;
+
 	public static WorldManager World { get; protected set; }
 	public Navigation2D NavMesh { get; protected set; }
 
 	Node2D BuildingNode;
+	Node2D CharacterNode;
 	List<Building> Buildings;
 	List<Character> Villagers;
 
@@ -24,13 +28,22 @@ public class WorldManager : Node2D
 		NavMesh = FindNode("NavMesh") as Navigation2D;
 
 		BuildingNode = GetNode<Node2D>("Buildings");
+		CharacterNode = GetNode<Node2D>("Characters");
 
-		Villagers.Add(FindNode("Character") as Character);
+		var builder1 = CreateVillager();
+		builder1.SetJob(new BuilderAI(builder1));
+
+		var builder2 = CreateVillager();
+		builder2.SetJob(new BuilderAI(builder2));
+
+		var farmer = CreateVillager();
+		farmer.SetJob(new FarmerAI(farmer));
 	}
 
 	public Building CreateBuilding()
 	{
 		var building = ResourceLoader.Load<PackedScene>(@"Scenes\World\Building.tscn").Instance() as Building;
+		Buildings.Add(building);
 		BuildingNode.AddChild(building);
 
 		if (GetBuilding(x => x.BuildType is TownHall) == null)
@@ -51,8 +64,6 @@ public class WorldManager : Node2D
 
 	public void RegisterBuilding(Building building)
 	{
-		Buildings.Add(building);
-
 		var polyMesh = NavMesh.FindNode("NavPoly") as NavigationPolygonInstance;
 
 		var outPoly = new List<Vector2>();
@@ -77,6 +88,16 @@ public class WorldManager : Node2D
 	public Building[] GetBuildingType(Predicate<Building> check)
 	{
 		return Buildings.FindAll(check).ToArray();
+	}
+
+	public Character CreateVillager()
+	{
+		var newVillager = CharacterScene.Instance() as Character;
+
+		Villagers.Add(newVillager);
+		CharacterNode.AddChild(newVillager);
+
+		return newVillager;
 	}
 
 	public int GetVillagerCount()

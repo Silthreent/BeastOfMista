@@ -41,4 +41,9 @@ public class Character : Area2D
 		}
 		DebugStatLabel.Text = builder.ToString();
 	}
+
+	public void SetJob(BaseAI job)
+	{
+		AI = job;
+	}
 }
