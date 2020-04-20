@@ -22,6 +22,8 @@ public class WorldManager : Node2D
 	List<Character> Villagers;
 	Character Beast;
 
+	Label BigText;
+
 	CursorMode Cursor;
 
 	public WorldManager()
@@ -41,6 +43,7 @@ public class WorldManager : Node2D
 		Camera = FindNode("Camera") as Camera2D;
 		BuildingNode = GetNode<Node2D>("Buildings");
 		CharacterNode = GetNode<Node2D>("Characters");
+		BigText = FindNode("BigText") as Label;
 
 		var builder = CreateVillager();
 		builder.SetJob(new BuilderAI(builder));
@@ -63,7 +66,7 @@ public class WorldManager : Node2D
 		Beast.SetSprite("Beast");
 		Beast.MovementSpeed = 175f;
 	}
-
+	 
 	public Building GetNextBuildProject()
 	{
 		if (GetTownHall() == null)
@@ -166,6 +169,14 @@ public class WorldManager : Node2D
 	public void OnVillagerDied(Character character)
 	{
 		Villagers.Remove(character);
+
+		if(GetVillagerCount() <= 0)
+		{
+			BigText.Text = "GAME OVER\n" +
+				"Without any villagers to feast on, " +
+	"your beast with refined taste is bound to perish.";
+			BigText.Visible = true;
+		}
 	}
 
 	public int GetVillagerCount()
@@ -179,6 +190,22 @@ public class WorldManager : Node2D
 		{
 			if(!(building.BuildType is TownHall))
 				building.TakeDamage(20);
+		}
+	}
+
+	public void TriggerEndCheck()
+	{
+		if (GlobalRNG.Next(0, GetVillagerCount()) > 10)
+		{
+			BigText.Text = "GAME OVER\n" +
+			"The people have had enough." +
+			"They head for your exhausted beast's cave, with no good intentions.";
+			BigText.Visible = true;
+
+			foreach (var x in Villagers)
+			{
+				x.AI.SetState(new MovingState(BeastCave));
+			}
 		}
 	}
 
@@ -218,10 +245,8 @@ public class WorldManager : Node2D
 		}
 		else if(input.IsActionPressed("release_beast"))
 		{
-			var hunt = new HuntState();
 			GD.Print("Required hunger: " + (100 - (((Beast.AI as BeastAI).Hunger - 100) / 2)));
-			hunt.RequiredHunger = 100 - (((Beast.AI as BeastAI).Hunger - 100) / 2);
-			Beast.AI.SetState(hunt);
+			Beast.AI.SetState(new HuntState());
 		}
 		else if (input.IsActionPressed("return_beast"))
 		{

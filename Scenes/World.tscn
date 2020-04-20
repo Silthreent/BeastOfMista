@@ -11,7 +11,7 @@ polygons = [ PoolIntArray( 0, 1, 2, 3 ) ]
 outlines = [ PoolVector2Array( -1914.41, 1513.6, 2075.33, 1569.53, 2051.9, -1142.53, -1934.38, -1090.81 ) ]
 
 [sub_resource type="DynamicFont" id=2]
-size = 214
+size = 64
 font_data = ExtResource( 2 )
 
 [node name="World" type="Node2D"]
@@ -34,18 +34,16 @@ script = ExtResource( 4 )
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="BigText" type="Label" parent="CanvasLayer"]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -666.246
-margin_top = -406.347
-margin_right = -359.246
-margin_bottom = -81.3467
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 custom_fonts/font = SubResource( 2 )
-text = "Test
+text = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
  "
+align = 1
+valign = 1
+autowrap = true
 __meta__ = {
 "_edit_use_anchors_": false
 }

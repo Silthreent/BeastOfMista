@@ -9,6 +9,7 @@ public class HuntState : IState
 
     public void Start(Character target)
     {
+        RequiredHunger = 100 - (((target.AI as BeastAI).Hunger - 100) / 2);
         FindHunt(target);
     }
 
@@ -16,7 +17,7 @@ public class HuntState : IState
     {
         if ((target.AI as BeastAI).Hunger >= 100)
         {
-            target.AI.FinishState();
+            target.AI.SetState(new MovingState(WorldManager.World.BeastCave));
             return;
         }
 
@@ -38,6 +39,7 @@ public class HuntState : IState
 
     public void End(Character target)
     {
+        WorldManager.World.TriggerEndCheck();
     }
 
     public string GetDebugInfo()
