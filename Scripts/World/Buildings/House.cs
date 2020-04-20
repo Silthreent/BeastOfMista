@@ -1,3 +1,5 @@
+using Godot;
+
 public class House : BuildingType
 {
     public House()
@@ -22,6 +24,7 @@ public class House : BuildingType
             newVillager.SetJob(new BuilderAI(newVillager));
         }
 
+        GD.Print($"CREATED NEW {newVillager.AI.GetType()}"); 
         newVillager.GlobalPosition = building.GlobalPosition;
     }
 }

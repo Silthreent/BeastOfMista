@@ -210,6 +210,17 @@ public class WorldManager : Node2D
 				building.TakeDamage(20);
 		}
 
+		if (Cursor == CursorMode.Bless)
+		{
+			if(building.BuildType is TownHall)
+			{
+				building.Storage.GainItem(Item.Wheat, 100);
+			}
+			else if(building.BuildType is Farmland)
+			{
+				building.Storage.GainItem(Item.Wheat, 200);
+			}
+		}
 	}
 
 	public void TriggerEndCheck()
