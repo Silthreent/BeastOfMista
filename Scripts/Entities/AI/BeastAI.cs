@@ -12,7 +12,7 @@ public class BeastAI : BaseAI
     {
         base.Process(delta);
 
-        Hunger -= 1 * delta;
+        Hunger -= .5f * delta;
 
         if(Hunger <= 0)
         {

@@ -23,6 +23,7 @@ public class WorldManager : Node2D
 	Character Beast;
 
 	Label BigText;
+	ProgressBar HungerBar;
 
 	CursorMode Cursor;
 
@@ -44,6 +45,7 @@ public class WorldManager : Node2D
 		BuildingNode = GetNode<Node2D>("Buildings");
 		CharacterNode = GetNode<Node2D>("Characters");
 		BigText = FindNode("BigText") as Label;
+		HungerBar = FindNode("HungerBar") as ProgressBar;
 
 		var builder = CreateVillager();
 		builder.SetJob(new BuilderAI(builder));
@@ -66,7 +68,12 @@ public class WorldManager : Node2D
 		Beast.SetSprite("Beast");
 		Beast.MovementSpeed = 175f;
 	}
-	 
+
+	public override void _Process(float delta)
+	{
+		HungerBar.Value = (Beast.AI as BeastAI).Hunger;
+	}
+
 	public Building GetNextBuildProject()
 	{
 		if (GetTownHall() == null)
@@ -201,7 +208,7 @@ public class WorldManager : Node2D
 			BigText.Text = "GAME OVER\n" +
 			"The people have had enough." +
 			"They head for your exhausted beast's cave, with no good intentions.";
-			BigText.Visible = true;
+			BigText.Visible = true; 
 
 			foreach (var x in Villagers)
 			{
