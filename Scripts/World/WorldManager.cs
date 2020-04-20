@@ -212,13 +212,26 @@ public class WorldManager : Node2D
 
 		if (Cursor == CursorMode.Bless)
 		{
-			if(building.BuildType is TownHall)
+			if(building.IsFunctional)
 			{
-				building.Storage.GainItem(Item.Wheat, 100);
+				if (building.BuildType is TownHall)
+				{
+					building.Storage.GainItem(Item.Wheat, 100);
+				}
+				else if (building.BuildType is Farmland)
+				{
+					building.Storage.GainItem(Item.Wheat, 200);
+				}
+				else if (building.BuildType is House)
+				{
+					var newVillager = CreateVillager();
+					newVillager.SetJob(new BuilderAI(newVillager));
+					newVillager.GlobalPosition = building.GlobalPosition;
+				}
 			}
-			else if(building.BuildType is Farmland)
+			else
 			{
-				building.Storage.GainItem(Item.Wheat, 200);
+				building.ProgressProgress(100);
 			}
 		}
 	}
