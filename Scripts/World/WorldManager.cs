@@ -24,6 +24,9 @@ public class WorldManager : Node2D
 
 	Label BigText;
 	ProgressBar HungerBar;
+	TextureRect Selected;
+	TextureRect[] UIIcons;
+	Label HelpText;
 
 	CursorMode Cursor;
 
@@ -46,6 +49,14 @@ public class WorldManager : Node2D
 		CharacterNode = GetNode<Node2D>("Characters");
 		BigText = FindNode("BigText") as Label;
 		HungerBar = FindNode("HungerBar") as ProgressBar;
+		Selected = FindNode("Selected") as TextureRect;
+		HelpText = FindNode("HelpText") as Label;
+
+		UIIcons = new TextureRect[4];
+		UIIcons[0] = FindNode("Destroy") as TextureRect;
+		UIIcons[1] = FindNode("Bless") as TextureRect;
+		UIIcons[2] = FindNode("ReleaseBeast") as TextureRect;
+		UIIcons[3] = FindNode("ReturnBeast") as TextureRect;
 
 		var builder = CreateVillager();
 		builder.SetJob(new BuilderAI(builder));
@@ -233,9 +244,30 @@ public class WorldManager : Node2D
 		else if (input.IsActionPressed("cursor_destroy"))
 		{
 			if (Cursor != CursorMode.Destroy)
+			{
 				Cursor = CursorMode.Destroy;
+				Selected.RectGlobalPosition = UIIcons[0].RectGlobalPosition;
+				Selected.Visible = true;
+			}
 			else
+			{
 				Cursor = CursorMode.Nothing;
+				Selected.Visible = false;
+			}
+		}
+		else if (input.IsActionPressed("cursor_bless"))
+		{
+			if (Cursor != CursorMode.Bless)
+			{
+				Cursor = CursorMode.Bless;
+				Selected.RectGlobalPosition = UIIcons[1].RectGlobalPosition;
+				Selected.Visible = true;
+			}
+			else
+			{
+				Cursor = CursorMode.Nothing;
+				Selected.Visible = false;
+			}
 		}
 		else if (input.IsActionPressed("switch_view"))
 		{
@@ -277,5 +309,6 @@ public class WorldManager : Node2D
 enum CursorMode
 {
 	Nothing,
-	Destroy
+	Destroy,
+	Bless
 }
