@@ -22,9 +22,9 @@ public class HuntState : IState
         }
 
         var movingDir = CurrentPath[PathMarker] - target.GlobalPosition;
-        target.Position += movingDir.Normalized() * (target.MovementSpeed * delta);
+        target.GlobalPosition += movingDir.Normalized() * (target.MovementSpeed * delta);
 
-        if (target.Position.DistanceTo(CurrentPath[PathMarker]) <= 5)
+        if (target.GlobalPosition.DistanceTo(CurrentPath[PathMarker]) <= 5)
         {
             PathMarker++;
             if (PathMarker >= CurrentPath.Length)
@@ -44,7 +44,10 @@ public class HuntState : IState
 
     public string GetDebugInfo()
     {
-        return "";
+        if (CurrentPath != null)
+            return CurrentPath[PathMarker].ToString();
+        else
+            return "";
     }
 
     void FindHunt(Character target)

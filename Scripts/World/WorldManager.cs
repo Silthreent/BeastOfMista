@@ -52,7 +52,7 @@ public class WorldManager : Node2D
 		var farmer = CreateVillager();
 		farmer.SetJob(new FarmerAI(farmer));
 
-		BeastCave = ResourceLoader.Load<PackedScene>(@"Scenes\World\Building.tscn").Instance() as Building;
+		BeastCave = ResourceLoader.Load<PackedScene>(@"Scenes/World/Building.tscn").Instance() as Building;
 		BuildingNode.AddChild(BeastCave);
 		BeastCave.SetBuildingType(new BeastCave());
 		BeastCave.ProgressProgress(10000);
@@ -111,7 +111,7 @@ public class WorldManager : Node2D
 
 	Building CreateBuilding()
 	{
-		var building = ResourceLoader.Load<PackedScene>(@"Scenes\World\Building.tscn").Instance() as Building;
+		var building = ResourceLoader.Load<PackedScene>(@"Scenes/World/Building.tscn").Instance() as Building;
 		Buildings.Add(building);
 		BuildingNode.AddChild(building);
 
@@ -174,7 +174,7 @@ public class WorldManager : Node2D
 		{
 			BigText.Text = "GAME OVER\n" +
 				"Without any villagers to feast on, " +
-	"your beast with refined taste is bound to perish.";
+	"your beast with refined tastes is bound to perish.";
 			BigText.Visible = true;
 		}
 	}
@@ -191,6 +191,7 @@ public class WorldManager : Node2D
 			if(!(building.BuildType is TownHall))
 				building.TakeDamage(20);
 		}
+
 	}
 
 	public void TriggerEndCheck()

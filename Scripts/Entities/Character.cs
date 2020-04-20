@@ -40,8 +40,10 @@ public class Character : Area2D
 	public override void _Process(float delta)
 	{
 		AI.Process(delta);
+
 		DebugStateLabel.Text = AI.CurrentState.GetType().ToString() + "\n" + AI.CurrentState.GetDebugInfo();
 
+		/*
 		StringBuilder builder = new StringBuilder();
 		foreach(Stat x in Enum.GetValues(typeof(Stat)))
 		{
@@ -50,11 +52,12 @@ public class Character : Area2D
 			builder.Append('\n');
 		}
 		DebugStatLabel.Text = builder.ToString();
+		*/
 	}
 
 	public void SetSprite(string name)
 	{
-		GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<Texture>($@"Assets\Sprites\Characters\{name}.png");
+		GetNode<Sprite>("Sprite").Texture = ResourceLoader.Load<Texture>($@"Assets/Sprites/Characters/{name}.png");
 	}
 
 	public void SetJob(BaseAI job)

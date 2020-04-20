@@ -10,6 +10,8 @@ public class BeastAI : BaseAI
 
     public override void Process(float delta)
     {
+        base.Process(delta);
+
         Hunger -= 1 * delta;
 
         if(Hunger <= 0)

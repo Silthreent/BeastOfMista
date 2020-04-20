@@ -34,6 +34,7 @@ __meta__ = {
 }
 
 [node name="StatLabel" type="Label" parent="."]
+visible = false
 margin_left = 16.7731
 margin_top = -19.0262
 margin_right = 56.7731

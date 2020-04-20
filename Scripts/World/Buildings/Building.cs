@@ -102,7 +102,7 @@ public class Building : Node2D
 	{
 		BuildType = type;
 
-		Sprite.Texture = ResourceLoader.Load<Texture>($@"Assets\Sprites\Buildings\{type.SpriteLocation}.png");
+		Sprite.Texture = ResourceLoader.Load<Texture>($@"Assets/Sprites/Buildings/{type.SpriteLocation}.png");
 	}
 
 	public void AssignBuilder(Character character)
