@@ -26,9 +26,13 @@ public class WorldManager : Node2D
 	ProgressBar HungerBar;
 	TextureRect Selected;
 	TextureRect[] UIIcons;
-	Label HelpText;
+	VBoxContainer HelpTextContainer;
+	Queue<Label> HelpTexts;
 
 	CursorMode Cursor;
+
+	float HelpTextFalloffTime = 5f;
+	float HelpTextTimer;
 
 	public WorldManager()
 	{
@@ -50,7 +54,8 @@ public class WorldManager : Node2D
 		BigText = FindNode("BigText") as Label;
 		HungerBar = FindNode("HungerBar") as ProgressBar;
 		Selected = FindNode("Selected") as TextureRect;
-		HelpText = FindNode("HelpText") as Label;
+		HelpTextContainer = FindNode("HelpText") as VBoxContainer;
+		HelpTexts = new Queue<Label>();
 
 		UIIcons = new TextureRect[4];
 		UIIcons[0] = FindNode("Destroy") as TextureRect;
@@ -83,6 +88,20 @@ public class WorldManager : Node2D
 	public override void _Process(float delta)
 	{
 		HungerBar.Value = (Beast.AI as BeastAI).Hunger;
+
+		if(HelpTextTimer > 0)
+		{
+			HelpTextTimer -= delta;
+
+			if(HelpTextTimer <= 0)
+			{
+				HelpTexts.Dequeue().QueueFree();
+				if(HelpTexts.Count > 0)
+				{
+					HelpTextTimer = HelpTextFalloffTime;
+				}
+			}
+		}
 	}
 
 	public Building GetNextBuildProject()
@@ -207,7 +226,14 @@ public class WorldManager : Node2D
 		if(Cursor == CursorMode.Destroy)
 		{
 			if(!(building.BuildType is TownHall))
+			{
 				building.TakeDamage(20);
+				AddHelpText("Building destroyed");
+			}
+			else
+			{
+				AddHelpText("You can't damage Town Hall");
+			}
 		}
 
 		if (Cursor == CursorMode.Bless)
@@ -217,21 +243,29 @@ public class WorldManager : Node2D
 				if (building.BuildType is TownHall)
 				{
 					building.Storage.GainItem(Item.Wheat, 100);
+					AddHelpText("100 Wheat added to Town Hall");
 				}
 				else if (building.BuildType is Farmland)
 				{
-					building.Storage.GainItem(Item.Wheat, 200);
+					building.Storage.GainItem(Item.Wheat, 300);
+					AddHelpText("300 Wheat added to Farmland");
 				}
 				else if (building.BuildType is House)
 				{
 					var newVillager = CreateVillager();
 					newVillager.SetJob(new BuilderAI(newVillager));
 					newVillager.GlobalPosition = building.GlobalPosition;
+					AddHelpText("A new builder is born");
 				}
 			}
 			else
 			{
-				building.ProgressProgress(100);
+				if(building.IsCompleted)
+				{
+					building.ProgressProgress(100);
+					AddHelpText("Building repaired");
+				}
+
 			}
 		}
 	}
@@ -326,6 +360,19 @@ public class WorldManager : Node2D
 				}
 			}
 
+		}
+	}
+
+	void AddHelpText(string text)
+	{
+		var newLabel = new Label();
+		newLabel.Text = text;
+		HelpTexts.Enqueue(newLabel);
+		HelpTextContainer.AddChild(newLabel);
+
+		if(HelpTextTimer <= 0)
+		{
+			HelpTextTimer = HelpTextFalloffTime;
 		}
 	}
 }
